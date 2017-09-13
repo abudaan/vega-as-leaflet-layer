@@ -1,0 +1,19 @@
+{
+    "presets": [
+        "stage-0",
+        [
+            "env",
+            {
+                "targets": {
+                    "browsers": [
+                        "last 2 versions",
+                        "> 2%",
+                        "not IE <= 11"
+                    ]
+                },
+                "useBuiltIns": true,
+                "debug": true
+            }
+        ]
+    ]
+}
