@@ -33,5 +33,5 @@ vegaAsLeafletLayer({
 
 Either `spec` of `view`  are mandatory, other arguments are optional:
 
-- mapContainer: id or HTML element that will be contain the Leaflet map instance
+- mapContainer: id or HTML element that will contain the Leaflet map instance
 - container: id or HTML element that will contain the mapContainer, defaults to document.body
