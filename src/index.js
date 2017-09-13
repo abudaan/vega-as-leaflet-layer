@@ -1,8 +1,37 @@
+/* eslint no-underscore-dangle: 0 */
+/* eslint no-plusplus: 0 */
+
 import { View, parse } from 'vega';
 import { TileLayer, Map } from 'leaflet';
+import { load } from 'fetch-helpers';
 import VegaLayer from './vega-layer';
 
 let divIdIndex = 0;
+
+const getPadding = (view) => {
+    const padding = view.padding();
+    const {
+        top = 0,
+        bottom = 0,
+        right = 0,
+        left = 0,
+    } = padding;
+    const result = {
+        top,
+        bottom,
+        right,
+        left,
+    };
+    if (
+        typeof padding.top === 'undefined' &&
+        typeof padding.bottom === 'undefined' &&
+        typeof padding.right === 'undefined' &&
+        typeof padding.left === 'undefined'
+    ) {
+        view.padding(result);
+    }
+    return result;
+};
 
 const vegaAsLeafletLayer = async (config) => {
     const {
@@ -21,17 +50,30 @@ const vegaAsLeafletLayer = async (config) => {
     }
 
     let vegaView = view;
-    let error = 'not a valid view';
     let padding;
-    try {
-        if (typeof view === 'undefined') {
-            error = 'not a valid spec';
-            vegaView = new View(parse(spec));
+    if (typeof view === 'undefined') {
+        let s;
+        try {
+            s = await load(spec);
+        } catch (e) {
+            console.error(e);
+            return;
         }
-        padding = vegaView.padding();
-    } catch (e) {
-        console.error(error);
-        return;
+        try {
+            vegaView = new View(parse(s));
+        } catch (e) {
+            console.error('not a valid spec', e);
+            return;
+        }
+        delete spec.vmvConfig;
+        padding = getPadding(vegaView);
+    } else {
+        try {
+            padding = getPadding(vegaView);
+        } catch (e) {
+            console.error('not a valid view');
+            return;
+        }
     }
 
     const {
@@ -45,46 +87,58 @@ const vegaAsLeafletLayer = async (config) => {
         return;
     }
 
-    let div = null;
-    if (typeof element === 'string') {
-        div = document.getElementById(element);
-        if (div === null) {
-            div = document.createElement('div');
-            div.id = element;
-        }
-    } else if (element instanceof HTMLElement) {
-        div = element;
+    let divMap = null;
+    if (typeof mapContainer === 'string') {
+        divMap = document.getElementById(mapContainer);
+    } else if (mapContainer instanceof HTMLElement) {
+        divMap = mapContainer;
+    }
+    if (divMap === null) {
+        divMap = document.createElement('div');
+        divMap.id = mapContainer;
     }
     const map = document.createElement('div');
-    const mapId = `${div.id}-map`
+    const mapId = `${divMap.id}-map`;
     map.id = mapId;
-    map.style.width = `${vegaView.width()}px`;
-    map.style.height = `${vegaView.height()}px`;
+    map.style.width = `${vegaView.width() || vegaView._runtime.width}px`;
+    map.style.height = `${vegaView.height() || vegaView._runtime.height}px`;
 
+
+    let divContainer = null;
+    if (typeof container === 'string') {
+        divContainer = document.getElementById(container);
+        if (divContainer === null) {
+            divContainer = document.createElement('div');
+            divContainer.id = container;
+        }
+    } else if (mapContainer instanceof HTMLElement) {
+        divContainer = container;
+    }
+    if (divContainer === null) {
+        divContainer = document.body;
+    }
     const {
         top,
         right,
         bottom,
         left,
     } = padding;
-    div.style.padding = `${top}px ${right}px ${bottom}px ${left}px`;
+    divMap.style.padding = `${top}px ${right}px ${bottom}px ${left}px`;
 
-    div.appendChild(map);
-    container.appendChild(div);
+    divMap.appendChild(map);
+    divContainer.appendChild(divMap);
 
     const leafletMap = new Map(mapId, {
         zoomAnimation: false,
     }).setView([latitude.value, longitude.value], zoom.value);
 
-    new TileLayer(
-        'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-            attribution: '<a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-            maxZoom,
-        },
-    ).addTo(leafletMap);
+    new TileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        attribution: '<a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+        maxZoom,
+    }).addTo(leafletMap);
 
     new VegaLayer(vegaView, {
-        renderer: renderer,
+        renderer,
         // Make sure the legend stays in place
         delayRepaint: true,
     }).addTo(leafletMap);

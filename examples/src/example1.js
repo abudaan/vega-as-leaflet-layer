@@ -1,5 +1,12 @@
 import { View, parse } from 'vega';
 import vegaAsLeafletLayer from '../../src/index';
+import createSpec4 from '../specs/spec4';
+
+const config = {
+    dataPath: './data/',
+    imagePath: './img/',
+};
+const spec4 = createSpec4(config);
 
 const spec = {
     signals: [
@@ -110,7 +117,10 @@ const view = new View(parse(spec));
 
 vegaAsLeafletLayer({
     // view,
-    spec,
+    // spec: spec,
+    // spec: JSON.stringify(spec),
+    spec: '../specs/spec4a.json',
+    // spec: spec4,
     // mapContainer: 'map',
     // container: document.body,
 });

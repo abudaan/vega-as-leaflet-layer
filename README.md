@@ -1,8 +1,24 @@
 # Vega as Leaflet layer
 
-Render Vega3 spec as layer on a Leaflet map, based on https://github.com/nyurik/leaflet-vega
+Render Vega3 spec as layer on a Leaflet map, based on <https://github.com/nyurik/leaflet-vega>
 
-## Basic usage
+## API
+```javascript
+import vegaAsLeafletLayer from 'vega-as-leaflet-layer';
+
+vegaAsLeafletLayer({
+    spec: '<string> | <object> | undefined',
+    view: '<VegaView> | undefined',
+    mapContainer: '<string> | undefined',
+    container: '<string> | undefined',
+});
+```
+You have to set either `spec` or `view`, the other 2 arguments are optional.
+
+- `mapContainer`: id or HTML element that will contain the Leaflet map instance
+- `container`: id or HTML element that will contain the mapContainer, defaults to document.body
+
+## Examples
 
 Pass a Vega view instance:
 
@@ -25,13 +41,17 @@ const spec = {
     ...
 };
 
-const view = new View(parse(spec));
 vegaAsLeafletLayer({
     spec,
 });
 ```
 
-You have to set either `spec` or `view`, other arguments are optional:
+Or pass the uri of Vega specification:
 
-- `mapContainer`: id or HTML element that will contain the Leaflet map instance
-- `container`: id or HTML element that will contain the mapContainer, defaults to document.body
+```javascript
+import vegaAsLeafletLayer from 'vega-as-leaflet-layer';
+
+vegaAsLeafletLayer({
+    spec: '../specs/spec3b.yaml',
+});
+```
