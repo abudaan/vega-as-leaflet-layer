@@ -16,7 +16,8 @@
     "keywords": [
         "vega",
         "leaflet",
-        "tile maps"
+        "tile maps",
+        "leaflet-vega"
     ],
     "dependencies": {
         "fetch-helpers": "https://github.com/abudaan/fetch-helpers",

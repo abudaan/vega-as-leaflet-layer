@@ -121,6 +121,7 @@ vegaAsLeafletLayer({
     // spec: JSON.stringify(spec),
     spec: '../specs/spec4a.json',
     // spec: spec4,
-    // mapContainer: 'map',
     // container: document.body,
+    // cssClassVegaLayer: ['class1', 'class2'],
+    cssClassVegaLayer: 'class2',
 });

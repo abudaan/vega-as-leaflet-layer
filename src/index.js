@@ -39,9 +39,9 @@ const vegaAsLeafletLayer = async (config) => {
         view,
         renderer = 'canvas',
         container = document.body,
-        mapContainer = `vega-leaflet-${divIdIndex++}`,
+        mapElement = `vega-leaflet-${divIdIndex++}`,
         maxZoom = 18,
-        cssClassMap = 'leaflet-vega-container',
+        cssClassVegaLayer = ['leaflet-vega-container'],
     } = config;
 
     if (typeof spec === 'undefined' && typeof view === 'undefined') {
@@ -88,35 +88,20 @@ const vegaAsLeafletLayer = async (config) => {
     }
 
     let divMap = null;
-    if (typeof mapContainer === 'string') {
-        divMap = document.getElementById(mapContainer);
-    } else if (mapContainer instanceof HTMLElement) {
-        divMap = mapContainer;
+    let containerNeeded = true;
+    if (typeof mapElement === 'string') {
+        divMap = document.getElementById(mapElement);
+        containerNeeded = document.getElementById(mapElement) === null;
+    } else if (mapElement instanceof HTMLElement) {
+        divMap = mapElement;
+        containerNeeded = document.getElementById(mapElement.id) === null;
     }
     if (divMap === null) {
         divMap = document.createElement('div');
-        divMap.id = mapContainer;
+        divMap.id = mapElement;
     }
-    const map = document.createElement('div');
-    const mapId = `${divMap.id}-map`;
-    map.id = mapId;
-    map.style.width = `${vegaView.width() || vegaView._runtime.width}px`;
-    map.style.height = `${vegaView.height() || vegaView._runtime.height}px`;
-
-
-    let divContainer = null;
-    if (typeof container === 'string') {
-        divContainer = document.getElementById(container);
-        if (divContainer === null) {
-            divContainer = document.createElement('div');
-            divContainer.id = container;
-        }
-    } else if (mapContainer instanceof HTMLElement) {
-        divContainer = container;
-    }
-    if (divContainer === null) {
-        divContainer = document.body;
-    }
+    divMap.style.width = `${vegaView.width() || vegaView._runtime.width}px`;
+    divMap.style.height = `${vegaView.height() || vegaView._runtime.height}px`;
     const {
         top,
         right,
@@ -125,10 +110,23 @@ const vegaAsLeafletLayer = async (config) => {
     } = padding;
     divMap.style.padding = `${top}px ${right}px ${bottom}px ${left}px`;
 
-    divMap.appendChild(map);
-    divContainer.appendChild(divMap);
-
-    const leafletMap = new Map(mapId, {
+    let divContainer = null;
+    if (typeof container === 'string') {
+        divContainer = document.getElementById(container);
+        if (divContainer === null) {
+            divContainer = document.createElement('div');
+            divContainer.id = container;
+        }
+    } else if (container instanceof HTMLElement) {
+        divContainer = container;
+    }
+    if (divContainer === null) {
+        divContainer = document.body;
+    }
+    if (containerNeeded === true) {
+        divContainer.appendChild(divMap);
+    }
+    const leafletMap = new Map(divMap.id, {
         zoomAnimation: false,
     }).setView([latitude.value, longitude.value], zoom.value);
 
@@ -137,10 +135,15 @@ const vegaAsLeafletLayer = async (config) => {
         maxZoom,
     }).addTo(leafletMap);
 
+    let classes = cssClassVegaLayer;
+    if (typeof cssClassVegaLayer === 'string') {
+        classes = [cssClassVegaLayer];
+    }
     new VegaLayer(vegaView, {
         renderer,
         // Make sure the legend stays in place
         delayRepaint: true,
+        cssClassVegaLayer: classes,
     }).addTo(leafletMap);
 };
 

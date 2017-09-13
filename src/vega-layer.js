@@ -11,6 +11,7 @@ const VegaLayer = (Layer || Class).extend({
     options: {
         // If true, graph will be repainted only after the map has finished moving (faster)
         delayRepaint: true,
+        cssClassVegaLayer: '',
     },
 
     initialize: function initialize(view, options) {
@@ -29,12 +30,11 @@ const VegaLayer = (Layer || Class).extend({
 
     onAdd: function onAdd(map) {
         this.map = map;
-        this.vegaContainer = DomUtil.create('div', 'leaflet-vega-container');
+        this.vegaContainer = DomUtil.create('div', this.options.cssClassVegaLayer.join(' '));
         map._panes.overlayPane.appendChild(this.vegaContainer);
 
         this.view
-            .initialize(this.vegaContainer)
-        // .padding({ top: 0, left: 0, right: 0, bottom: 0 });
+            .initialize(this.vegaContainer);
 
         const onSignal = (sig, value) => this.onSignalChange(sig, value);
 
@@ -55,7 +55,7 @@ const VegaLayer = (Layer || Class).extend({
             this.view = null;
         }
 
-        L.DomUtil.empty()
+        DomUtil.empty();
     },
 
     onSignalChange: function onSignalChange(sig, value) {
@@ -63,17 +63,17 @@ const VegaLayer = (Layer || Class).extend({
         let zoom = this.map.getZoom();
 
         switch (sig) {
-            case 'latitude':
-                center.lat = value;
-                break;
-            case 'longitude':
-                center.lng = value;
-                break;
-            case 'zoom':
-                zoom = value;
-                break;
-            default:
-                return; // ignore
+        case 'latitude':
+            center.lat = value;
+            break;
+        case 'longitude':
+            center.lng = value;
+            break;
+        case 'zoom':
+            zoom = value;
+            break;
+        default:
+            return; // ignore
         }
 
         this.map.setView(center, zoom);
