@@ -1,0 +1,31 @@
+{
+    "name": "vega-as-leaflet-layer-examples",
+    "version": "1.0.0",
+    "license": "MIT",
+    "author": "abudaan",
+    "scripts": {
+        "example1": "watchify ./src/example1.js -t [ babelify ] -o ./build/example1.js --debug --verbose",
+        "example2": "watchify ./src/example2.js -t [ babelify ] -o ./build/example2.js --debug --verbose",
+        "server2": "python -m SimpleHTTPServer 9002 ../"
+    },
+    "dependencies": {
+        "vega": "^3.0.2"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "babel-eslint": "^7.2.3",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-preset-env": "^1.6.0",
+        "babel-preset-flow": "^6.23.0",
+        "babel-preset-stage-0": "^6.24.1",
+        "babelify": "^7.3.0",
+        "eslint": "^4.6.1",
+        "eslint-config-airbnb-base": "12.0.0",
+        "eslint-plugin-babel": "4.1.1",
+        "eslint-plugin-flowtype": "^2.35.1",
+        "eslint-plugin-import": "2.7.0",
+        "flow-bin": "0.42.0",
+        "sort-package-json": "^1.7.1",
+        "watchify": "^3.9.0"
+    }
+}
