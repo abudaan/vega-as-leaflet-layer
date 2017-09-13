@@ -16,15 +16,15 @@ var _ramda = require('ramda');
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
+var _leaflet = require('leaflet');
+
 var _vegaLayer = require('./vega-layer');
 
 var _vegaLayer2 = _interopRequireDefault(_vegaLayer);
 
-var _leaflet = require('leaflet');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var addVegaAsLeafletLayer = function () {
+var vegaAsLeafletLayer = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(config) {
         var spec, view, renderer, element, signals, zoom, latitude, longitude, leafletMap;
         return _regenerator2.default.wrap(function _callee$(_context) {
@@ -70,9 +70,9 @@ var addVegaAsLeafletLayer = function () {
         }, _callee, undefined);
     }));
 
-    return function addVegaAsLeafletLayer(_x) {
+    return function vegaAsLeafletLayer(_x) {
         return _ref.apply(this, arguments);
     };
 }();
 
-exports.default = addVegaAsLeafletLayer;
+exports.default = vegaAsLeafletLayer;

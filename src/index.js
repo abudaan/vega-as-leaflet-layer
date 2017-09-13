@@ -1,8 +1,8 @@
 import R from 'ramda';
-import VegaLayer from './vega-layer';
 import { TileLayer, Map } from 'leaflet';
+import VegaLayer from './vega-layer';
 
-const addVegaAsLeafletLayer = async (config) => {
+const vegaAsLeafletLayer = async (config) => {
     const {
         spec,
         view,
@@ -37,4 +37,4 @@ const addVegaAsLeafletLayer = async (config) => {
     }).addTo(leafletMap);
 };
 
-export default addVegaAsLeafletLayer;
+export default vegaAsLeafletLayer;
