@@ -4,120 +4,75 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _regenerator = require('babel-runtime/regenerator');
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+var _ramda = require('ramda');
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _vegaLayer = require('./vega-layer');
+
+var _vegaLayer2 = _interopRequireDefault(_vegaLayer);
+
 var _leaflet = require('leaflet');
 
-var VegaLayer = (_leaflet.Layer || _leaflet.Class).extend({
-    options: {
-        // If true, graph will be repainted only after the map has finished moving (faster)
-        delayRepaint: true
-    },
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-    initialize: function initialize(view, options) {
-        _leaflet.Util.setOptions(this, options);
-        this.view = view;
-    },
+var addVegaAsLeafletLayer = function () {
+    var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(config) {
+        var spec, view, renderer, element, signals, zoom, latitude, longitude, leafletMap;
+        return _regenerator2.default.wrap(function _callee$(_context) {
+            while (1) {
+                switch (_context.prev = _context.next) {
+                    case 0:
+                        spec = config.spec, view = config.view, renderer = config.renderer, element = config.element;
+                        signals = spec.signals || [];
+                        zoom = _ramda2.default.find(_ramda2.default.propEq('name', 'zoom'))(signals);
+                        latitude = _ramda2.default.find(_ramda2.default.propEq('name', 'latitude'))(signals);
+                        longitude = _ramda2.default.find(_ramda2.default.propEq('name', 'longitude'))(signals);
 
-    /**
-     * @param {L.Map} map
-     * @return {L.VegaLayer}
-     */
-    addTo: function addTo(map) {
-        map.addLayer(this);
-        return this;
-    },
+                        if (!(_ramda2.default.isNil(zoom) || _ramda2.default.isNil(latitude) || _ramda2.default.isNil(longitude))) {
+                            _context.next = 8;
+                            break;
+                        }
 
-    onAdd: function onAdd(map) {
-        var _this = this;
+                        console.error('incomplete map spec; if you want to add Vega as a Leaflet layer you should provide signals for zoom, latitude and longitude');
+                        return _context.abrupt('return');
 
-        this.map = map;
-        this.vegaContainer = _leaflet.DomUtil.create('div', 'leaflet-vega-container');
-        map._panes.overlayPane.appendChild(this.vegaContainer);
+                    case 8:
+                        leafletMap = new _leaflet.Map(element, {
+                            zoomAnimation: false
+                        }).setView([latitude.value, longitude.value], zoom.value);
 
-        this.view.initialize(this.vegaContainer).padding({ top: 0, left: 0, right: 0, bottom: 0 });
 
-        var onSignal = function onSignal(sig, value) {
-            return _this.onSignalChange(sig, value);
-        };
+                        new _leaflet.TileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+                            attribution: '<a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+                            maxZoom: 18
+                        }).addTo(leafletMap);
 
-        this.view.addSignalListener('latitude', onSignal).addSignalListener('longitude', onSignal).addSignalListener('zoom', onSignal);
+                        new _vegaLayer2.default(view, {
+                            renderer: renderer,
+                            // Make sure the legend stays in place
+                            delayRepaint: true
+                        }).addTo(leafletMap);
 
-        map.on(this.options.delayRepaint ? 'moveend' : 'move', function () {
-            return _this.update();
-        });
-        map.on('zoomend', function () {
-            return _this.update();
-        });
-
-        return this.update(true);
-    },
-
-    onRemove: function onRemove() {
-        if (this.view) {
-            this.view.finalize();
-            this.view = null;
-        }
-
-        L.DomUtil.empty();
-    },
-
-    onSignalChange: function onSignalChange(sig, value) {
-        var center = this.map.getCenter();
-        var zoom = this.map.getZoom();
-
-        switch (sig) {
-            case 'latitude':
-                center.lat = value;
-                break;
-            case 'longitude':
-                center.lng = value;
-                break;
-            case 'zoom':
-                zoom = value;
-                break;
-            default:
-                return; // ignore
-        }
-
-        this.map.setView(center, zoom);
-        this.update();
-    },
-
-    update: function update(force) {
-        var _this2 = this;
-
-        var topLeft = this.map.containerPointToLayerPoint([0, 0]);
-        _leaflet.DomUtil.setPosition(this.vegaContainer, topLeft);
-
-        var size = this.map.getSize();
-        var center = this.map.getCenter();
-        var zoom = this.map.getZoom();
-
-        var sendSignal = function sendSignal(sig, value) {
-            if (_this2.view.signal(sig) !== value) {
-                _this2.view.signal(sig, value);
-                return 1;
+                    case 11:
+                    case 'end':
+                        return _context.stop();
+                }
             }
-            return 0;
-        };
+        }, _callee, undefined);
+    }));
 
-        // Only send changed signals to Vega. Detect if any of the signals have changed before calling run()
-        var changed = 0;
-        changed |= sendSignal('width', size.x);
-        changed |= sendSignal('height', size.y);
-        changed |= sendSignal('latitude', center.lat);
-        changed |= sendSignal('longitude', center.lng);
-        changed |= sendSignal('zoom', zoom);
+    return function addVegaAsLeafletLayer(_x) {
+        return _ref.apply(this, arguments);
+    };
+}();
 
-        if (changed || force) {
-            return this.view.runAsync();
-        }
-        return 0;
-    }
-}); /* eslint no-underscore-dangle: 0 */
-/* eslint no-bitwise: 0 */
-
-/*
-    based on: https://github.com/nyurik/leaflet-vega
-*/
-
-exports.default = VegaLayer;
+exports.default = addVegaAsLeafletLayer;
