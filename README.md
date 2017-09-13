@@ -5,6 +5,7 @@ Render Vega3 spec as layer on a Leaflet map, based on https://github.com/nyurik/
 ## Basic usage
 
 ```javascript
+import { View, parse } from 'vega';
 import vegaAsLeafletLayer from 'vega-as-leaflet-layer';
 
 const view = new View(parse(spec));
