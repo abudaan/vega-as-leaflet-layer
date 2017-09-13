@@ -33,9 +33,9 @@ You have to set either `spec` or `view`, the other 2 arguments are optional.
 
 Leaflet can't render a map to an element that has not been added to the DOM. Therefor either `mapElement` or `container` have to refer to a live HTML element. Because `container` defaults to `document.body` the map will be rendered even if you omit both parameters. In that case a new div with an unique id will be created for the map, and this new div will be added to the document's body. Although the map will be rendered anyway, setting values for `mapElement` and/or `container` give you better control over where the map will be rendered on your page.
 
-If you set an id for `mapElement` and there is no element with that id added to the DOM, a new div with that id will be created and added to the element set by `container`. If you set an HTML element for `mapElement` and the element has not been added to the DOM, it will be added to the `container`.
+If you set an id for `mapElement` and there is no element with that id added to the DOM, a new div with that id will be created and added to the element set by `container`. If you set an HTML element for `mapElement` and that element has not been added to the DOM, it will be added to the `container`.
 
-If you don't set a value for `container` and the provided `mapElement` had not been added to the DOM, the `mapElement` will be added to the document's body. If the `mapElement` is live than `container` is not necessary and will be discarded.
+If you don't set a value for `container` and the provided `mapElement` has not been added to the DOM, the `mapElement` will be added to the document's body. If the `mapElement` is live than `container` is not necessary and will be discarded.
 
 In a Vega specification you can set the width and the height as well as the padding. These values are not applied to the rendered Vega view but to the Leaflet map element instead; this will automatically set the dimensions of the Leaflet layer. Padding can't be applied to the Vega layer directly, but by applying the padding to the Leaflet map we achieve the expected result.
 
