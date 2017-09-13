@@ -34,7 +34,7 @@ const VegaLayer = (Layer || Class).extend({
 
         this.view
             .initialize(this.vegaContainer)
-            .padding({ top: 0, left: 0, right: 0, bottom: 0 });
+        // .padding({ top: 0, left: 0, right: 0, bottom: 0 });
 
         const onSignal = (sig, value) => this.onSignalChange(sig, value);
 

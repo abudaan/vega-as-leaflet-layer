@@ -98,10 +98,19 @@ const spec = {
     }],
     width: 300,
     height: 600,
+    padding: {
+        top: 20,
+        right: 20,
+        bottom: 20,
+        left: 20,
+    },
 };
 
 const view = new View(parse(spec));
+
 vegaAsLeafletLayer({
-    view,
-    elementId: 'map',
+    // view,
+    spec,
+    // mapContainer: 'map',
+    // container: document.body,
 });

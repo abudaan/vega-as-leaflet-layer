@@ -19,7 +19,8 @@
         "tile maps"
     ],
     "dependencies": {
-        "leaflet": "^1.2.0"
+        "leaflet": "^1.2.0",
+        "vega": "^3.0.2"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
