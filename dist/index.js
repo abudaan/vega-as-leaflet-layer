@@ -19,19 +19,16 @@ var _leaflet = require('leaflet');
 
 var _fetchHelpers = require('fetch-helpers');
 
-var _pkginfo = require('pkginfo');
-
-var _pkginfo2 = _interopRequireDefault(_pkginfo);
-
 var _vegaLayer = require('./vega-layer');
 
 var _vegaLayer2 = _interopRequireDefault(_vegaLayer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-console.log((0, _pkginfo2.default)('version')); /* eslint no-underscore-dangle: 0 */
+/* eslint no-underscore-dangle: 0 */
 /* eslint no-plusplus: 0 */
 
+console.log('vega-as-leaflet-layer 1.1.2');
 var divIdIndex = 0;
 
 var getPadding = function getPadding(view) {

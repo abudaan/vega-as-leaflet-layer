@@ -4,10 +4,9 @@
 import { View, parse } from 'vega';
 import { TileLayer, Map } from 'leaflet';
 import { load } from 'fetch-helpers';
-import pkginfo from 'pkginfo';
 import VegaLayer from './vega-layer';
 
-console.log(pkginfo('version'));
+console.log('vega-as-leaflet-layer 1.1.2');
 let divIdIndex = 0;
 
 const getPadding = (view) => {
