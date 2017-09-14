@@ -29,7 +29,7 @@ const getPadding = (view) => {
         typeof padding.right === 'undefined' &&
         typeof padding.left === 'undefined'
     ) {
-        view.padding(result);
+        return null;
     }
     return result;
 };
@@ -43,6 +43,7 @@ const vegaAsLeafletLayer = async (config) => {
         mapElement = `vega-leaflet-${divIdIndex++}`,
         maxZoom = 18,
         cssClassVegaLayer = ['leaflet-vega-container'],
+        overruleVegaPadding = false,
     } = config;
 
     let error;
@@ -107,13 +108,15 @@ const vegaAsLeafletLayer = async (config) => {
         divMapContainer = document.createElement('div');
         divMapContainer.id = mapElement;
     }
-    const {
-        top,
-        right,
-        bottom,
-        left,
-    } = padding;
-    divMapContainer.style.padding = `${top}px ${right}px ${bottom}px ${left}px`;
+    if (padding !== null) {
+        const {
+            top,
+            right,
+            bottom,
+            left,
+        } = padding;
+        divMapContainer.style.padding = `${top}px ${right}px ${bottom}px ${left}px`;
+    }
     vegaView.padding({
         top: 0,
         bottom: 0,

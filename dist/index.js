@@ -49,14 +49,14 @@ var getPadding = function getPadding(view) {
         left: left
     };
     if (typeof padding.top === 'undefined' && typeof padding.bottom === 'undefined' && typeof padding.right === 'undefined' && typeof padding.left === 'undefined') {
-        view.padding(result);
+        return null;
     }
     return result;
 };
 
 var vegaAsLeafletLayer = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(config) {
-        var spec, view, _config$renderer, renderer, _config$container, container, _config$mapElement, mapElement, _config$maxZoom, maxZoom, _config$cssClassVegaL, cssClassVegaLayer, error, vegaView, padding, s, _ref2, zoom, latitude, longitude, divMap, containerNeeded, _padding, top, right, bottom, left, divMap2, divContainer, leafletMap, classes;
+        var spec, view, _config$renderer, renderer, _config$container, container, _config$mapElement, mapElement, _config$maxZoom, maxZoom, _config$cssClassVegaL, cssClassVegaLayer, error, vegaView, padding, s, _ref2, zoom, latitude, longitude, divMapContainer, containerNeeded, _padding, top, right, bottom, left, divMap, divContainer, leafletMap, classes;
 
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
@@ -149,23 +149,25 @@ var vegaAsLeafletLayer = function () {
                         return _context.abrupt('return', new Error(error));
 
                     case 47:
-                        divMap = null;
+                        divMapContainer = null;
                         containerNeeded = true;
 
                         if (typeof mapElement === 'string') {
-                            divMap = document.getElementById(mapElement);
+                            divMapContainer = document.getElementById(mapElement);
                             containerNeeded = document.getElementById(mapElement) === null;
                         } else if (mapElement instanceof HTMLElement) {
-                            divMap = mapElement;
+                            divMapContainer = mapElement;
                             containerNeeded = document.getElementById(mapElement.id) === null;
                         }
-                        if (divMap === null) {
-                            divMap = document.createElement('div');
-                            divMap.id = mapElement;
+                        if (divMapContainer === null) {
+                            divMapContainer = document.createElement('div');
+                            divMapContainer.id = mapElement;
                         }
-                        _padding = padding, top = _padding.top, right = _padding.right, bottom = _padding.bottom, left = _padding.left;
+                        if (padding !== null) {
+                            _padding = padding, top = _padding.top, right = _padding.right, bottom = _padding.bottom, left = _padding.left;
 
-                        divMap.style.padding = top + 'px ' + right + 'px ' + bottom + 'px ' + left + 'px';
+                            divMapContainer.style.padding = top + 'px ' + right + 'px ' + bottom + 'px ' + left + 'px';
+                        }
                         vegaView.padding({
                             top: 0,
                             bottom: 0,
@@ -173,12 +175,12 @@ var vegaAsLeafletLayer = function () {
                             left: 0
                         });
 
-                        divMap2 = document.createElement('div');
+                        divMap = document.createElement('div');
 
-                        divMap2.id = divMap.id + '-map';
-                        divMap2.style.width = vegaView.width() + 'px';
-                        divMap2.style.height = vegaView.height() + 'px';
-                        divMap.appendChild(divMap2);
+                        divMap.id = divMapContainer.id + '-map';
+                        divMap.style.width = vegaView.width() + 'px';
+                        divMap.style.height = vegaView.height() + 'px';
+                        divMapContainer.appendChild(divMap);
 
                         divContainer = null;
 
@@ -195,9 +197,9 @@ var vegaAsLeafletLayer = function () {
                             divContainer = document.body;
                         }
                         if (containerNeeded === true) {
-                            divContainer.appendChild(divMap);
+                            divContainer.appendChild(divMapContainer);
                         }
-                        leafletMap = new _leaflet.Map(divMap2.id, {
+                        leafletMap = new _leaflet.Map(divMap.id, {
                             zoomAnimation: false
                         }).setView([latitude.value, longitude.value], zoom.value);
 
@@ -219,9 +221,9 @@ var vegaAsLeafletLayer = function () {
                             cssClassVegaLayer: classes
                         }).addTo(leafletMap);
 
-                        return _context.abrupt('return', [divMap, vegaView]);
+                        return _context.abrupt('return', [divMapContainer, vegaView]);
 
-                    case 69:
+                    case 68:
                     case 'end':
                         return _context.stop();
                 }
