@@ -44,9 +44,12 @@ const vegaAsLeafletLayer = async (config) => {
         cssClassVegaLayer = ['leaflet-vega-container'],
     } = config;
 
+    let error;
+
     if (typeof spec === 'undefined' && typeof view === 'undefined') {
-        console.error('please provide at least spec or a Vega view instance');
-        return;
+        error = 'please provide at least spec or a Vega view instance';
+        console.error(error);
+        return new Error(error);
     }
 
     let vegaView = view;
@@ -57,13 +60,14 @@ const vegaAsLeafletLayer = async (config) => {
             s = await load(spec);
         } catch (e) {
             console.error(e);
-            return;
+            return e;
         }
         try {
             vegaView = new View(parse(s));
         } catch (e) {
-            console.error('not a valid spec', e);
-            return;
+            error = `not a valid spec ${e}`;
+            console.error(error);
+            return new Error(error);
         }
         delete spec.vmvConfig;
         padding = getPadding(vegaView);
@@ -71,8 +75,9 @@ const vegaAsLeafletLayer = async (config) => {
         try {
             padding = getPadding(vegaView);
         } catch (e) {
-            console.error('not a valid view');
-            return;
+            error = `not a valid view ${e}`;
+            console.error(error);
+            return new Error(error);
         }
     }
 
@@ -83,8 +88,9 @@ const vegaAsLeafletLayer = async (config) => {
     } = vegaView._runtime.signals || [];
 
     if (typeof zoom === 'undefined' || typeof latitude === 'undefined' || typeof longitude === 'undefined') {
-        console.error('incomplete map spec; if you want to add Vega as a Leaflet layer you should provide signals for zoom, latitude and longitude');
-        return;
+        error = 'incomplete map spec; if you want to add Vega as a Leaflet layer you should provide signals for zoom, latitude and longitude';
+        console.error(error);
+        return new Error(error);
     }
 
     let divMap = null;
@@ -145,6 +151,8 @@ const vegaAsLeafletLayer = async (config) => {
         delayRepaint: true,
         cssClassVegaLayer: classes,
     }).addTo(leafletMap);
+
+    return divMap;
 };
 
 export default vegaAsLeafletLayer;

@@ -124,4 +124,12 @@ vegaAsLeafletLayer({
     // container: document.body,
     // cssClassVegaLayer: ['class1', 'class2'],
     cssClassVegaLayer: 'class2',
-});
+})
+    .then((map) => {
+        setTimeout(() => {
+            const parent = map.parentNode;
+            parent.removeChild(map);
+        }, 2000);
+    })
+    .catch(e => console.error(e));
+
