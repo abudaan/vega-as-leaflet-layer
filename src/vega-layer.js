@@ -11,7 +11,7 @@ const VegaLayer = (Layer || Class).extend({
     options: {
         // If true, graph will be repainted only after the map has finished moving (faster)
         delayRepaint: true,
-        cssClassVegaLayer: '',
+        cssClassVegaLayer: [''],
     },
 
     initialize: function initialize(view, options) {

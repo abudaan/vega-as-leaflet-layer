@@ -1,5 +1,5 @@
 import { View, parse } from 'vega';
-import vegaAsLeafletLayer from '../../src/index';
+import vegaAsLeafletLayer, { VegaLayer } from '../../src/index';
 import createSpec4 from '../specs/spec4';
 
 const config = {
@@ -112,24 +112,4 @@ const spec = {
         left: 20,
     },
 };
-
-const view = new View(parse(spec));
-
-vegaAsLeafletLayer({
-    // view,
-    // spec: spec,
-    // spec: JSON.stringify(spec),
-    spec: '../specs/spec4a.json',
-    // spec: spec4,
-    // container: document.body,
-    // cssClassVegaLayer: ['class1', 'class2'],
-    cssClassVegaLayer: 'class2',
-})
-    .then((map) => {
-        setTimeout(() => {
-            const parent = map.parentNode;
-            parent.removeChild(map);
-        }, 2000);
-    })
-    .catch(e => console.error(e));
 

@@ -152,7 +152,8 @@ const vegaAsLeafletLayer = async (config) => {
         cssClassVegaLayer: classes,
     }).addTo(leafletMap);
 
-    return divMap;
+    return [divMap, vegaView];
 };
 
 export default vegaAsLeafletLayer;
+export VegaLayer from './vega-layer';
