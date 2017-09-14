@@ -28,7 +28,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /* eslint no-underscore-dangle: 0 */
 /* eslint no-plusplus: 0 */
 
-console.log('vega-as-leaflet-layer 1.1.2');
+console.log('vega-as-leaflet-layer 1.1.3');
 var divIdIndex = 0;
 
 var getPadding = function getPadding(view) {
@@ -56,7 +56,7 @@ var getPadding = function getPadding(view) {
 
 var vegaAsLeafletLayer = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(config) {
-        var spec, view, _config$renderer, renderer, _config$container, container, _config$mapElement, mapElement, _config$maxZoom, maxZoom, _config$cssClassVegaL, cssClassVegaLayer, error, vegaView, padding, s, _ref2, zoom, latitude, longitude, divMap, containerNeeded, _padding, top, right, bottom, left, divContainer, leafletMap, classes;
+        var spec, view, _config$renderer, renderer, _config$container, container, _config$mapElement, mapElement, _config$maxZoom, maxZoom, _config$cssClassVegaL, cssClassVegaLayer, error, vegaView, padding, s, _ref2, zoom, latitude, longitude, divMap, containerNeeded, _padding, top, right, bottom, left, divMap2, divContainer, leafletMap, classes;
 
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
@@ -163,11 +163,22 @@ var vegaAsLeafletLayer = function () {
                             divMap = document.createElement('div');
                             divMap.id = mapElement;
                         }
-                        divMap.style.width = (vegaView.width() || vegaView._runtime.width) + 'px';
-                        divMap.style.height = (vegaView.height() || vegaView._runtime.height) + 'px';
                         _padding = padding, top = _padding.top, right = _padding.right, bottom = _padding.bottom, left = _padding.left;
 
                         divMap.style.padding = top + 'px ' + right + 'px ' + bottom + 'px ' + left + 'px';
+                        vegaView.padding({
+                            top: 0,
+                            bottom: 0,
+                            right: 0,
+                            left: 0
+                        });
+
+                        divMap2 = document.createElement('div');
+
+                        divMap2.id = divMap.id + '-map';
+                        divMap2.style.width = vegaView.width() + 'px';
+                        divMap2.style.height = vegaView.height() + 'px';
+                        divMap.appendChild(divMap2);
 
                         divContainer = null;
 
@@ -186,7 +197,7 @@ var vegaAsLeafletLayer = function () {
                         if (containerNeeded === true) {
                             divContainer.appendChild(divMap);
                         }
-                        leafletMap = new _leaflet.Map(divMap.id, {
+                        leafletMap = new _leaflet.Map(divMap2.id, {
                             zoomAnimation: false
                         }).setView([latitude.value, longitude.value], zoom.value);
 
@@ -210,7 +221,7 @@ var vegaAsLeafletLayer = function () {
 
                         return _context.abrupt('return', [divMap, vegaView]);
 
-                    case 65:
+                    case 69:
                     case 'end':
                         return _context.stop();
                 }

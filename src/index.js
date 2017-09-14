@@ -6,7 +6,7 @@ import { TileLayer, Map } from 'leaflet';
 import { load } from 'fetch-helpers';
 import VegaLayer from './vega-layer';
 
-console.log('vega-as-leaflet-layer 1.1.2');
+console.log('vega-as-leaflet-layer 1.1.3');
 let divIdIndex = 0;
 
 const getPadding = (view) => {
@@ -107,8 +107,6 @@ const vegaAsLeafletLayer = async (config) => {
         divMap = document.createElement('div');
         divMap.id = mapElement;
     }
-    divMap.style.width = `${vegaView.width() || vegaView._runtime.width}px`;
-    divMap.style.height = `${vegaView.height() || vegaView._runtime.height}px`;
     const {
         top,
         right,
@@ -116,6 +114,20 @@ const vegaAsLeafletLayer = async (config) => {
         left,
     } = padding;
     divMap.style.padding = `${top}px ${right}px ${bottom}px ${left}px`;
+    vegaView.padding({
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+    });
+
+
+    const divMap2 = document.createElement('div');
+    divMap2.id = `${divMap.id}-map`;
+    divMap2.style.width = `${vegaView.width()}px`;
+    divMap2.style.height = `${vegaView.height()}px`;
+    divMap.appendChild(divMap2);
+
 
     let divContainer = null;
     if (typeof container === 'string') {
@@ -133,7 +145,7 @@ const vegaAsLeafletLayer = async (config) => {
     if (containerNeeded === true) {
         divContainer.appendChild(divMap);
     }
-    const leafletMap = new Map(divMap.id, {
+    const leafletMap = new Map(divMap2.id, {
         zoomAnimation: false,
     }).setView([latitude.value, longitude.value], zoom.value);
 

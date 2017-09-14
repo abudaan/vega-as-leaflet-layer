@@ -104,12 +104,21 @@ const spec = {
         },
     }],
     width: 300,
-    height: 600,
+    height: 1200,
     padding: {
-        top: 20,
-        right: 20,
-        bottom: 20,
-        left: 20,
+        top: 50,
+        right: 50,
+        bottom: 50,
+        left: 150,
     },
 };
 
+vegaAsLeafletLayer({
+    spec,
+})
+    .then(([map, view]) => {
+        // view.addSignalListener('buurt_hover_naam', (name, value) => {
+        //     console.log(`signal ${name} now has value ${value}`);
+        // });
+    })
+    .catch(e => console.error(e));
