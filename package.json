@@ -22,6 +22,7 @@
     "dependencies": {
         "fetch-helpers": "https://github.com/abudaan/fetch-helpers",
         "leaflet": "^1.2.0",
+        "pkginfo": "^0.4.1",
         "vega": "^3.0.2"
     },
     "devDependencies": {

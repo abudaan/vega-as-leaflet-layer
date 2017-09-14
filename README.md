@@ -212,7 +212,7 @@ vegaAsLeafletLayer({
 
 ### example 7
 
-Exotic example creating a `VegaLayer` instance and add it to a Leaflet map manually. As you can see you have to perform a lot of pre-processing: all this is taken care of by the library in the examples above. I have just added this example to show you the flexibility of this library.
+Exotic example creating a `VegaLayer` instance first and then add it to a Leaflet map manually. As you can see you have to perform a lot of pre-processing: all this is taken care of by the library for you in the examples above. I have just added this example to show you the flexibility of this library.
 
 ```javascript
 /* eslint no-underscore-dangle: 0 */

@@ -9,7 +9,8 @@ var _leaflet = require('leaflet');
 var VegaLayer = (_leaflet.Layer || _leaflet.Class).extend({
     options: {
         // If true, graph will be repainted only after the map has finished moving (faster)
-        delayRepaint: true
+        delayRepaint: true,
+        cssClassVegaLayer: ['']
     },
 
     initialize: function initialize(view, options) {
@@ -30,10 +31,10 @@ var VegaLayer = (_leaflet.Layer || _leaflet.Class).extend({
         var _this = this;
 
         this.map = map;
-        this.vegaContainer = _leaflet.DomUtil.create('div', 'leaflet-vega-container');
+        this.vegaContainer = _leaflet.DomUtil.create('div', this.options.cssClassVegaLayer.join(' '));
         map._panes.overlayPane.appendChild(this.vegaContainer);
 
-        this.view.initialize(this.vegaContainer).padding({ top: 0, left: 0, right: 0, bottom: 0 });
+        this.view.initialize(this.vegaContainer);
 
         var onSignal = function onSignal(sig, value) {
             return _this.onSignalChange(sig, value);
@@ -57,7 +58,7 @@ var VegaLayer = (_leaflet.Layer || _leaflet.Class).extend({
             this.view = null;
         }
 
-        L.DomUtil.empty();
+        _leaflet.DomUtil.empty();
     },
 
     onSignalChange: function onSignalChange(sig, value) {
