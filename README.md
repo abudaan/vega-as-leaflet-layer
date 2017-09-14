@@ -220,7 +220,7 @@ Exotic example creating a `VegaLayer` instance and add it to a Leaflet map manua
 import { View, parse } from 'vega';
 import { TileLayer, Map } from 'leaflet';
 import { load } from 'fetch-helpers';
-import { VegaLayer } from '../../src/index';
+import { VegaLayer } from 'vega-as-leaflet-layer';
 
 const mapDiv = document.createElement('div');
 mapDiv.id = 'mapDiv';
