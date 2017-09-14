@@ -94,18 +94,18 @@ const vegaAsLeafletLayer = async (config) => {
         return new Error(error);
     }
 
-    let divMap = null;
+    let divMapContainer = null;
     let containerNeeded = true;
     if (typeof mapElement === 'string') {
-        divMap = document.getElementById(mapElement);
+        divMapContainer = document.getElementById(mapElement);
         containerNeeded = document.getElementById(mapElement) === null;
     } else if (mapElement instanceof HTMLElement) {
-        divMap = mapElement;
+        divMapContainer = mapElement;
         containerNeeded = document.getElementById(mapElement.id) === null;
     }
-    if (divMap === null) {
-        divMap = document.createElement('div');
-        divMap.id = mapElement;
+    if (divMapContainer === null) {
+        divMapContainer = document.createElement('div');
+        divMapContainer.id = mapElement;
     }
     const {
         top,
@@ -113,7 +113,7 @@ const vegaAsLeafletLayer = async (config) => {
         bottom,
         left,
     } = padding;
-    divMap.style.padding = `${top}px ${right}px ${bottom}px ${left}px`;
+    divMapContainer.style.padding = `${top}px ${right}px ${bottom}px ${left}px`;
     vegaView.padding({
         top: 0,
         bottom: 0,
@@ -122,11 +122,11 @@ const vegaAsLeafletLayer = async (config) => {
     });
 
 
-    const divMap2 = document.createElement('div');
-    divMap2.id = `${divMap.id}-map`;
-    divMap2.style.width = `${vegaView.width()}px`;
-    divMap2.style.height = `${vegaView.height()}px`;
-    divMap.appendChild(divMap2);
+    const divMap = document.createElement('div');
+    divMap.id = `${divMapContainer.id}-map`;
+    divMap.style.width = `${vegaView.width()}px`;
+    divMap.style.height = `${vegaView.height()}px`;
+    divMapContainer.appendChild(divMap);
 
 
     let divContainer = null;
@@ -143,9 +143,9 @@ const vegaAsLeafletLayer = async (config) => {
         divContainer = document.body;
     }
     if (containerNeeded === true) {
-        divContainer.appendChild(divMap);
+        divContainer.appendChild(divMapContainer);
     }
-    const leafletMap = new Map(divMap2.id, {
+    const leafletMap = new Map(divMap.id, {
         zoomAnimation: false,
     }).setView([latitude.value, longitude.value], zoom.value);
 
@@ -165,7 +165,7 @@ const vegaAsLeafletLayer = async (config) => {
         cssClassVegaLayer: classes,
     }).addTo(leafletMap);
 
-    return [divMap, vegaView];
+    return [divMapContainer, vegaView];
 };
 
 export default vegaAsLeafletLayer;
