@@ -11,18 +11,7 @@ let divIdIndex = 0;
 
 const getPadding = (view) => {
     const padding = view.padding();
-    const {
-        top = 0,
-        bottom = 0,
-        right = 0,
-        left = 0,
-    } = padding;
-    const result = {
-        top,
-        bottom,
-        right,
-        left,
-    };
+    // check if the spec has defined a valid padding object
     if (
         typeof padding.top === 'undefined' &&
         typeof padding.bottom === 'undefined' &&
@@ -31,6 +20,20 @@ const getPadding = (view) => {
     ) {
         return null;
     }
+    // fill empty slots with 0
+    const {
+        top = 0,
+        bottom = 0,
+        right = 0,
+        left = 0,
+    } = padding;
+    // this is the padding
+    const result = {
+        top,
+        bottom,
+        right,
+        left,
+    };
     return result;
 };
 
@@ -40,7 +43,7 @@ const vegaAsLeafletLayer = async (config) => {
         view,
         renderer = 'canvas',
         container = document.body,
-        mapElement = `vega-leaflet-${divIdIndex++}`,
+        mapContainer = `vega-leaflet-${divIdIndex++}`,
         maxZoom = 18,
         cssClassVegaLayer = ['leaflet-vega-container'],
         overruleVegaPadding = false,
@@ -96,19 +99,19 @@ const vegaAsLeafletLayer = async (config) => {
     }
 
     let divMapContainer = null;
-    let containerNeeded = true;
-    if (typeof mapElement === 'string') {
-        divMapContainer = document.getElementById(mapElement);
-        containerNeeded = document.getElementById(mapElement) === null;
-    } else if (mapElement instanceof HTMLElement) {
-        divMapContainer = mapElement;
-        containerNeeded = document.getElementById(mapElement.id) === null;
+    if (typeof mapContainer === 'string') {
+        divMapContainer = document.getElementById(mapContainer);
+    } else if (mapContainer instanceof HTMLElement) {
+        divMapContainer = mapContainer;
     }
     if (divMapContainer === null) {
         divMapContainer = document.createElement('div');
-        divMapContainer.id = mapElement;
+        divMapContainer.id = mapContainer;
     }
-    if (padding !== null) {
+    const containerNeeded = document.getElementById(mapContainer.id) === null;
+    // apply padding as found in Vega spec unless we want to set the padding
+    // via a css class that may be added to the mapContainer.
+    if (padding !== null && overruleVegaPadding !== true) {
         const {
             top,
             right,
@@ -117,6 +120,7 @@ const vegaAsLeafletLayer = async (config) => {
         } = padding;
         divMapContainer.style.padding = `${top}px ${right}px ${bottom}px ${left}px`;
     }
+    // padding of Vega view must always be 0
     vegaView.padding({
         top: 0,
         bottom: 0,
@@ -124,13 +128,12 @@ const vegaAsLeafletLayer = async (config) => {
         left: 0,
     });
 
-
+    // create a div for the Leaflet map
     const divMap = document.createElement('div');
     divMap.id = `${divMapContainer.id}-map`;
     divMap.style.width = `${vegaView.width()}px`;
     divMap.style.height = `${vegaView.height()}px`;
     divMapContainer.appendChild(divMap);
-
 
     let divContainer = null;
     if (typeof container === 'string') {

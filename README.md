@@ -43,6 +43,7 @@ type OptionsType = {
     mapContainer?: 'string | HTMLElement',
     container?: 'string | HTMLElement',
     cssClassVegaLayer?: 'string | Array<string>',
+    overruleVegaPadding?: 'boolean',
 };
 
 vegaAsLeafletLayer(options: OptionsType): Promise<any>
@@ -91,7 +92,9 @@ Note that in situation 3 and 4 you will get a an extra containing div around you
 
 ### Applying styles
 
-In a Vega specification you can set the width and the height as well as the padding. The width and the height are applied to the Leaflet map element and the padding is applied to the `mapContainer`. This is because if you apply the padding to the Leaflet map element, the Vega layer will be padded.
+In a Vega specification you can set the width and the height as well as the padding. The width and the height are applied to the Leaflet map element and the padding is applied to the `mapContainer`. This is done because if you apply the padding to the Leaflet map element, the Vega layer will be padded inside the Leaflet map which means that it won't appear at position 0,0 and that the Vega layer is not well-aligned with the map.
+
+This means that the Leaflet map always needs a containing element if you want to apply padding. If you provide an HTML element for `mapElement` then the existing padding of that element will be overruled by the padding as set in the Vega specification. If you want to keep the element's own padding you can set `overruleVegaPadding` to true. Note that if you don't set a value for `mapElement` an element will be created for you.
 
 In pseudo HTML:
 
