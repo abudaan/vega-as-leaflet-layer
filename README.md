@@ -40,7 +40,7 @@ import vegaAsLeafletLayer from 'vega-as-leaflet-layer';
 type OptionsType = {
     spec?: 'string | object',
     view?: 'VegaViewType',
-    mapContainer?: 'string | HTMLElement',
+    mapContainer?: 'null | string | HTMLElement',
     container?: 'string | HTMLElement',
     cssClassVegaLayer?: 'string | Array<string>',
     overruleVegaPadding?: 'boolean',
@@ -94,7 +94,9 @@ Note that in situation 3 and 4 you will get a an extra containing div around you
 
 In a Vega specification you can set the width and the height as well as the padding. The width and the height are applied to the Leaflet map element and the padding is applied to the `mapContainer`. This is done because if you apply the padding to the Leaflet map element, the Vega layer will be padded inside the Leaflet map which means that it won't appear at position 0,0 and that the Vega layer is not well-aligned with the map.
 
-This means that the Leaflet map always needs a containing element if you want to apply padding. If you provide an HTML element for `mapElement` then the existing padding of that element will be overruled by the padding as set in the Vega specification. If you want to keep the element's own padding you can set `overruleVegaPadding` to true. Note that if you don't set a value for `mapElement` an element will be created for you.
+This means that the Leaflet map always needs a containing element if you want to apply padding. If you provide an HTML element for `mapContainer` then the existing padding of that element will be overruled by the padding as set in the Vega specification. If you want to keep the element's own padding you can set `overruleVegaPadding` to true.
+
+Note that if you don't set a value for `mapContainer` an element will be created for you, if you don't want to create a container for the Leaflet map, for instance because you want to add the Leaflet map directly to your container,you can set `mapContainer` to `null`. If you set `mapContainer` to null you can have to set a value for `container` because a Leaflet map can not be added to the document's body.
 
 In pseudo HTML:
 
