@@ -8,6 +8,8 @@
         "example2": "watchify ./src/example2.js -t [ babelify ] -o ./build/example2.js --debug --verbose",
         "example3": "watchify ./src/example3.js -t [ babelify ] -o ./build/example3.js --debug --verbose",
         "example4": "watchify ./src/example4.js -t [ babelify ] -o ./build/example4.js --debug --verbose",
+        "example5": "watchify ./src/example5.js -t [ babelify ] -o ./build/example5.js --debug --verbose",
+        "example6": "watchify ./src/example6.js -t [ babelify ] -o ./build/example6.js --debug --verbose",
         "server": "python -m SimpleHTTPServer 9002 ../"
     },
     "dependencies": {

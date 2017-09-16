@@ -60,14 +60,6 @@ const vegaAsLeafletLayer = async (config) => {
     }
 
 
-    // create a div for the Leaflet map
-    const divMap = document.createElement('div');
-    divMap.id = `${divMapContainer.id}-map`;
-    divMap.style.width = `${vegaView.width()}px`;
-    divMap.style.height = `${vegaView.height()}px`;
-    divMapContainer.appendChild(divMap);
-
-
     // set up the container element for the container of the map; if mapContainer is set to false
     // the map will be added to the container directly
     let divContainer = null;
@@ -80,7 +72,7 @@ const vegaAsLeafletLayer = async (config) => {
         document.body.appendChild(divContainer);
     } else if (container instanceof HTMLElement) {
         divContainer = container;
-        if (document.getElementById(divContainer === null)) {
+        if (document.getElementById(divContainer.id === null)) {
             document.body.appendChild(divContainer);
         }
     }
@@ -90,22 +82,28 @@ const vegaAsLeafletLayer = async (config) => {
 
     // if the mapContainer has not yet been added to the DOM, add it to the container element
     if (
-        mapContainer !== false &&
+        divMapContainer !== null &&
         document.getElementById(mapContainer.id) === null
     ) {
         divContainer.appendChild(divMapContainer);
     }
 
-    // add the Leaflet map to the mapContainer or to the container; either of them should be
-    // a live element by now
-    let leafletMapId;
-    if (mapContainer === null) {
-        leafletMapId = divContainer.id;
+    // create a div for the Leaflet map and add the Leaflet map to the mapContainer or to the container;
+    // either of them should be a live element by now
+    const divMap = document.createElement('div');
+    divMap.style.width = `${vegaView.width()}px`;
+    divMap.style.height = `${vegaView.height()}px`;
+    let divMapId;
+    // console.log(divContainer, divMapContainer);
+    if (divMapContainer === null) {
+        divMapId = `${divContainer.id}-map`;
+        divContainer.appendChild(divMap);
     } else {
-        leafletMapId = divMap.id;
+        divMapId = `${divMapContainer.id}-map`;
+        divMapContainer.appendChild(divMap);
     }
-
-    const leafletMap = new Map(leafletMapId, {
+    divMap.id = divMapId;
+    const leafletMap = new Map(divMapId, {
         zoomAnimation: false,
     }).setView([latitude.value, longitude.value], zoom.value);
 

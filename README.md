@@ -24,11 +24,11 @@ Render a Vega specification as layer on a Leaflet map, based on <https://github.
 
 ## Introduction
 
-In `leaflet-vega` extra functionality is added to the global `L` variable. A Vega layer is created by calling `L.vega(spec)`; you pass the specification and it gets rendered into a view in the constructor function of the layer.
+In `leaflet-vega` an extra function is added to the global `L` variable; you create a Vega layer by calling `L.vega(spec)`. You pass the specification (spec) as argument and it gets rendered into a Vega view in the constructor function of the layer.
 
 In `vega-as-leaflet-layer` I have separated Vega and Leaflet; it consists a two parts, the first part is a class `VegaLayer` that is very much based on `leaflet-vega`, but it takes an instance of a Vega view as parameter so it has not dependencies on Vega.
 
-The second part is a pre-processing function that returns a promise. It is the default export of the module, so you can import it with any name you want. The function either takes a Vega specification or a Vega view as argument. First the function checks if the mandatory signals `zoom` and `latitude` and `longitude` are defined, if not the promise rejects. In `leaflet-vega` the mandatory signals are added to the spec automatically if they are missing but that can yield weird results if you accidentally try to add a spec that is or does not need a map.
+The second part is a pre-processing function that returns a promise. It is the default export of the module, so you can import it with any name you want. The function either takes a Vega spec or a Vega view as argument. First the function checks if the mandatory signals `zoom` and `latitude` and `longitude` are defined, if not the promise rejects. In `leaflet-vega` the mandatory signals are added to the Vega view automatically if they are missing but that can yield weird results if you accidentally try to add a spec that is or does not need a map.
 
 After the spec has passed the check, the DOM gets prepared for the Leaflet map, see [Adding the map to the DOM](#adding-the-map-to-the-dom), and the map gets rendered with the Vega view in a Layer. The promise returns an array that contains the div element that holds the map as first element, and the Vega view as second element. You can use these references for further manipulation, for instance if you want to remove the map from the DOM at a certain point in time ([example 5](#example-5)), or if you want to add event listeners to the view ([example 6](#example-6)).
 
@@ -47,13 +47,13 @@ type OptionsType = {
 };
 
 vegaAsLeafletLayer(options: OptionsType): Promise<any>
-    .then(null | HTMLElement)
+    .then([HTMLElement, VegaViewType])
     .catch(Error);
 
 ```
-You have to set either `spec` or `view`, the other 2 arguments are optional.
+You have to set either `spec` or `view`, the other arguments are optional.
 
-* `spec`: is the Vega specification in one of the following formats
+* `spec`: The Vega specification in one of the following formats
     * javascript object
     * JSON string
     * uri of a file that contains the specification in one of these formats
@@ -61,42 +61,46 @@ You have to set either `spec` or `view`, the other 2 arguments are optional.
         * BSON
         * CSON
         * YAML
-* `view`: an instance of a Vega view
-* `mapContainer`: id or HTML element where the Leaflet map will be rendered to
-* `container`: id or HTML element that will contain the mapContainer, defaults to document.body
-* `cssClassVegaLayer`: the css class or array of classes that will be applied to the div that contains the Vega layer in Leaflet.
+* `view`: An instance of a Vega view
+* `mapContainer`: An id or a HTML element where the Leaflet map will be rendered to. Pass `false` if you don't want the Leaflet map to be rendered in a mapContainer, see below.
+* `container`: An id or a HTML element that will contain the mapContainer, defaults to document.body
+* `cssClassVegaLayer`: The css class or array of classes that will be applied to the div that contains the Vega layer in Leaflet.
+* `overruleVegaPadding`: Set to `true` if you want to set the padding of the element that contains the Leaflet map by adding a css class or inline styling to that element. Defaults to `false` which means that the padding will be set as defined in the Vega spec.
 
 ## How it works
 
 ### Adding the map to the DOM
 
-Leaflet can't render a map to an element that has not been added to the DOM. Therefor either `mapContainer` or `container` have to refer to a live HTML element. Because `container` defaults to `document.body` the map will be rendered even if you omit both parameters. In that case a new div will be created for the map; this div has a unique id and will be added to the document's body.
+Leaflet can't render a map to an element that has not been added to the DOM. Therefor either `mapContainer` or `container` have to refer to a live HTML element (i.e. a HTML element that has been added to the DOM). If you omit both parameters a `mapContainer` div with a unique id will be created, the Leaflet map will be rendered in this `mapContainer` and the `mapContainer` itself will be added to the document's body.
 
-Although the map will be rendered anyway, setting values for `mapContainer` and/or `container` give you better control over where the map will be rendered on your page.
+Although the map will be rendered anyway, setting values for `mapContainer` and/or `container` gives you better control over where the map will be rendered on your page.
 
-In most case you will set either `mapContainer` or `container`; set `mapContainer` if you want to add the Leaflet map to an existing element, and set `container` if you want to add one or more Leaflet maps to a specific container element.
+In most cases you will set either `mapContainer` or `container`; set `mapContainer` if you want to add a Leaflet map to an existing element, and set `container` if you want to add one or more Leaflet maps to a specific container element.
 
 1. If you set an id for `mapContainer` and there is no element with that id added to the DOM, a new div with that id will be created and added to the element set by `container`.
 
 2. If you set an HTML element for `mapContainer` and that element has not been added to the DOM, it will be added to `container`.
 
-3. If you set an id for `container` and there is no element with that id, a new div with that id will be created and added to the document's body.
+3. If you set `mapContainer` to false the Leaflet map will be added directly to the `container`. In this case you need to set `container` to a live HTML element because Leaflet can not add maps to the document's body.
 
-4. If you set a HTML element for `container` and this element is not added to the DOM, it will be added to the document's body.
+4. If you set an id for `container` and there is no element with that id, a new div with that id will be created and added to the document's body.
 
-5. If you don't set a value for `container` and the provided `mapContainer` has not been added to the DOM, the `mapContainer` will be added to the document's body.
+5. If you set a HTML element for `container` and this element is not added to the DOM, it will be added to the document's body.
 
-6. If the `mapContainer` is live and `container` is not set then `container` is not necessary and will be discarded.
+6. If you don't set a value for `container` and the provided `mapContainer` has not been added to the DOM, the `mapContainer` will be added to the document's body.
 
-Note that in situation 3 and 4 you will get a an extra containing div around your Leaflet element.
+7. If the `mapContainer` is live and `container` is not set then `container` is not necessary and will be discarded.
+
+8. If you don't set a value for `container` and `mapElement` is set to `false`, an error will be thrown.
+
 
 ### Applying styles
 
-In a Vega specification you can set the width and the height as well as the padding. The width and the height are applied to the Leaflet map element and the padding is applied to the `mapContainer`. This is done because if you apply the padding to the Leaflet map element, the Vega layer will be padded inside the Leaflet map which means that it won't appear at position 0,0 and that the Vega layer is not well-aligned with the map.
+In a Vega specification you can set the width and the height as well as the padding. The width and the height are applied to the Leaflet map element and the padding is applied to the `mapContainer`, or to the `container` if `mapContainer` is set to `false`. The reason for this is that if you apply the padding to the Leaflet map element directly, the Vega layer will be padded inside the Leaflet map which means that it won't appear at position 0,0 and thus the Vega layer is not well-aligned with the map.
 
-This means that the Leaflet map always needs a containing element if you want to apply padding. If you provide an HTML element for `mapContainer` then the existing padding of that element will be overruled by the padding as set in the Vega specification. If you want to keep the element's own padding you can set `overruleVegaPadding` to true.
+Therefor the Leaflet map always needs a containing element if you want to apply padding. This containing element is by default the value set for `mapContainer` but if you set `mapContainer` to `false` the containing element is the `container`.
 
-Note that if you don't set a value for `mapContainer` an element will be created for you, if you don't want to create a container for the Leaflet map, for instance because you want to add the Leaflet map directly to your container,you can set `mapContainer` to `false`. If you set `mapContainer` to null you can have to set a value for `container` because a Leaflet map can not be added to the document's body.
+The existing padding of the containing element will be overruled by the padding as set in the Vega specification. If you want to keep the element's own padding you can set `overruleVegaPadding` to true.
 
 In pseudo HTML:
 
