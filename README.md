@@ -40,7 +40,7 @@ import vegaAsLeafletLayer from 'vega-as-leaflet-layer';
 type OptionsType = {
     spec?: 'string | object',
     view?: 'VegaViewType',
-    mapContainer?: 'null | string | HTMLElement',
+    mapContainer?: 'false | string | HTMLElement',
     container?: 'string | HTMLElement',
     cssClassVegaLayer?: 'string | Array<string>',
     overruleVegaPadding?: 'boolean',
@@ -96,7 +96,7 @@ In a Vega specification you can set the width and the height as well as the padd
 
 This means that the Leaflet map always needs a containing element if you want to apply padding. If you provide an HTML element for `mapContainer` then the existing padding of that element will be overruled by the padding as set in the Vega specification. If you want to keep the element's own padding you can set `overruleVegaPadding` to true.
 
-Note that if you don't set a value for `mapContainer` an element will be created for you, if you don't want to create a container for the Leaflet map, for instance because you want to add the Leaflet map directly to your container,you can set `mapContainer` to `null`. If you set `mapContainer` to null you can have to set a value for `container` because a Leaflet map can not be added to the document's body.
+Note that if you don't set a value for `mapContainer` an element will be created for you, if you don't want to create a container for the Leaflet map, for instance because you want to add the Leaflet map directly to your container,you can set `mapContainer` to `false`. If you set `mapContainer` to null you can have to set a value for `container` because a Leaflet map can not be added to the document's body.
 
 In pseudo HTML:
 
