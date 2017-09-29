@@ -4,7 +4,7 @@
     "description": "Render Vega3 spec as layer on a Leaflet map, based on https://github.com/nyurik/leaflet-vega",
     "license": "MIT",
     "author": "abudaan",
-    "main": "dist/index.js",
+    "browser": "dist/index.js",
     "module": "src/index.js",
     "repository": "git://github.com/abudaan/vega-as-leaflet-layer.git",
     "bugs": {
