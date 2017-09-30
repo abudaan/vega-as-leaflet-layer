@@ -22,7 +22,7 @@
     "dependencies": {
         "fetch-helpers": "https://github.com/abudaan/fetch-helpers",
         "leaflet": "^1.2.0",
-        "vega": "3.0.2"
+        "vega": "^3.0.4"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
