@@ -3,8 +3,8 @@
 import { TileLayer, Map } from 'leaflet';
 import VegaLayer from './vega-layer';
 import checkView from './util/check-view';
+import { version } from '../package.json';
 
-console.info('vega-as-leaflet-layer 1.1.4');
 let divIdIndex = 0;
 
 const vegaAsLeafletLayer = async (config) => {
@@ -137,3 +137,7 @@ const vegaAsLeafletLayer = async (config) => {
 
 export default vegaAsLeafletLayer;
 export VegaLayer from './vega-layer';
+const v = `vega-as-leaflet-layer ${version}`;
+export {
+    v as version,
+};

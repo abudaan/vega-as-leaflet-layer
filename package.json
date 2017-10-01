@@ -11,7 +11,9 @@
         "url": "https://github.com/abudaan/vega-as-leaflet-layer/issues"
     },
     "scripts": {
-        "compile": "babel ./src --out-dir ./dist"
+        "compile": "babel ./src --out-dir ./dist",
+        "prepublish": "npm run compile",
+        "postpublish": "git push && git push --tags"
     },
     "keywords": [
         "vega",
