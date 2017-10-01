@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.VegaLayer = undefined;
+exports.version = exports.VegaLayer = undefined;
 
 var _regenerator = require('babel-runtime/regenerator');
 
@@ -23,9 +23,11 @@ var _checkView = require('./util/check-view');
 
 var _checkView2 = _interopRequireDefault(_checkView);
 
+var _package = require('../package.json');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-console.info('vega-as-leaflet-layer 1.1.4'); /* eslint no-plusplus: 0 */
+/* eslint no-plusplus: 0 */
 
 var divIdIndex = 0;
 
@@ -168,3 +170,6 @@ var vegaAsLeafletLayer = function () {
 
 exports.default = vegaAsLeafletLayer;
 exports.VegaLayer = _vegaLayer2.default;
+
+var v = 'vega-as-leaflet-layer ' + _package.version;
+exports.version = v;
