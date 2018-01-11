@@ -1,4 +1,6 @@
-import vegaAsLeafletLayer, { VegaLayer } from '../../src/index';
+import vegaAsLeafletLayer, { VegaLayer, version } from '../../src/index';
+
+console.log(version);
 
 vegaAsLeafletLayer({
     spec: '../specs/spec4a.json',

@@ -26,7 +26,7 @@ Render a Vega specification as layer on a Leaflet map, based on <https://github.
 
 In `leaflet-vega` an extra function is added to the global `L` variable; you create a Vega layer by calling `L.vega(spec)`. You pass the specification (spec) as argument and it gets rendered into a Vega view in the constructor function of the layer.
 
-In `vega-as-leaflet-layer` I have separated Vega and Leaflet; it consists a two parts, the first part is a class `VegaLayer` that is very much based on `leaflet-vega`, but it takes an instance of a Vega view as parameter so it has not dependencies on Vega.
+In `vega-as-leaflet-layer` I have separated Vega and Leaflet; it consists a two parts, the first part is a class `VegaLayer` that is very much based on `leaflet-vega`, but it takes an instance of a Vega view as parameter so it has no dependencies on Vega.
 
 The second part is a pre-processing function that returns a promise. It is the default export of the module, so you can import it with any name you want. The function either takes a Vega spec or a Vega view as argument. First the function checks if the mandatory signals `zoom` and `latitude` and `longitude` are defined, if not the promise rejects. In `leaflet-vega` the mandatory signals are added to the Vega view automatically if they are missing but that can yield weird results if you accidentally try to add a spec that is or does not need a map.
 
@@ -92,6 +92,21 @@ In most cases you will set either `mapContainer` or `container`; set `mapContain
 7. If the `mapContainer` is live and `container` is not set then `container` is not necessary and will be discarded.
 
 8. If you don't set a value for `container` and `mapElement` is set to `false`, an error will be thrown.
+
+
+### Add the Leaflet css file
+
+Leaflet comes with a css file that takes care of the positioning of the tiles of a map so you should include this file in your HTML page or compile it into your own custom css files. You can add it to your page using unpkg:
+
+```html
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+    integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+    crossorigin=""/>
+```
+
+If you install `vega-as-leaflet-layer` using `npm` of `yarn` you can find the css file in the folder `node_modules/leaflet/dist` as well.
 
 
 ### Applying styles
@@ -271,3 +286,7 @@ load('../specs/spec4a.json', 'json')
     });
 
 ```
+
+## TODO
+
+Add examples for Common JS and add support and examples for UMD (for coding like it's 1999).

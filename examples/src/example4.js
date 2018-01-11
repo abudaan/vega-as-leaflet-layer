@@ -1,9 +1,11 @@
 /* eslint no-underscore-dangle: 0 */
 
-import { View, parse } from 'vega';
+import { View, parse, version } from 'vega';
 import { TileLayer, Map } from 'leaflet';
 import { load } from 'fetch-helpers';
 import { VegaLayer } from '../../src/index';
+
+console.log(version);
 
 const mapDiv = document.createElement('div');
 mapDiv.id = 'mapDiv';
