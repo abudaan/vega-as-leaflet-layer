@@ -1,1 +1,8 @@
 examples
+.babel.rc
+.editorconfig
+.gitattributes
+.gitignore
+toc.md
+toc.sh
+yarn.lock

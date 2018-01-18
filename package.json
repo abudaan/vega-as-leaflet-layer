@@ -1,6 +1,6 @@
 {
     "name": "vega-as-leaflet-layer",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "description": "Render Vega3 spec as layer on a Leaflet map, based on https://github.com/nyurik/leaflet-vega",
     "license": "MIT",
     "author": "abudaan",
@@ -25,7 +25,7 @@
     "dependencies": {
         "fetch-helpers": "https://github.com/abudaan/fetch-helpers",
         "leaflet": "^1.2.0",
-        "vega": "^3.0.8"
+        "vega": "^3.0.9"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
