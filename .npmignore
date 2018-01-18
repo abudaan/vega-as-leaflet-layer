@@ -1,6 +1,7 @@
 examples
-.babel.rc
+.babelrc
 .editorconfig
+.eslintrc
 .gitattributes
 .gitignore
 toc.md
