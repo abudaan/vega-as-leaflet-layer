@@ -93,6 +93,10 @@ var VegaLayer = (_leaflet.Layer || _leaflet.Class).extend({
         var center = this.map.getCenter();
         var zoom = this.map.getZoom();
 
+        // console.log('size', size);
+        // console.log('zoom', zoom);
+        // console.log('center', center);
+
         var sendSignal = function sendSignal(sig, value) {
             if (_this2.view.signal(sig) !== value) {
                 _this2.view.signal(sig, value);
@@ -113,6 +117,13 @@ var VegaLayer = (_leaflet.Layer || _leaflet.Class).extend({
             return this.view.runAsync();
         }
         return 0;
+
+        // this.view.signal('width', size.x);
+        // this.view.signal('height', size.y);
+        // this.view.signal('latitude', center.lat);
+        // this.view.signal('longitude', center.lng);
+        // this.view.signal('zoom', zoom);
+        // return this.view.run();
     }
 }); /* eslint no-underscore-dangle: 0 */
 /* eslint no-bitwise: 0 */

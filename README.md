@@ -10,7 +10,9 @@ Render a Vega specification as layer on a Leaflet map, based on <https://github.
       * [API](#api)
       * [How it works](#how-it-works)
          * [Adding the map to the DOM](#adding-the-map-to-the-dom)
+         * [Add the Leaflet css file](#add-the-leaflet-css-file)
          * [Applying styles](#applying-styles)
+         * [Responsive maps](#responsive-maps)
       * [Examples](#examples)
          * [example 1](#example-1)
          * [example 2](#example-2)
@@ -19,6 +21,7 @@ Render a Vega specification as layer on a Leaflet map, based on <https://github.
          * [example 5](#example-5)
          * [example 6](#example-6)
          * [example 7](#example-7)
+      * [TODO](#todo)
 
 <sub>(toc created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc))</sub>
 
@@ -136,6 +139,34 @@ In pseudo HTML:
 ```
 
 Note that this complete div will be added to the `container` (or ultimately to the document's body).
+
+### Responsive maps
+
+If you want a responsive map and thus a responsive Vega layer, you have set these values in the spec:
+
+```yaml
+autosize: none # other values can yield weird results
+width: 0 # don't define width at all or set it to 0
+height: 0 # don't define height at all or set it to 0
+
+# in your sigals array add these two:
+signals:
+- name: width
+  on:
+    - events:
+        source: window
+        type: resize
+      update: "containerSize()[0] - padding.left - padding.right"
+- name: height
+  on:
+    - events:
+        source: window
+        type: resize
+      update: "containerSize()[1] - padding.top - padding.bottom"
+```
+
+This will make your Vega view responsive. The width and height of the `mapContainer` will be set to 100% so it resizes automatically together with the `container` element, which makes the Leaflet layer responsive as well.
+
 
 ## Examples
 

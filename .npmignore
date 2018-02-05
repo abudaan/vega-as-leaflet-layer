@@ -4,6 +4,7 @@ examples
 .eslintrc
 .gitattributes
 .gitignore
+gh-md-toc
 toc.md
 toc.sh
 yarn.lock

@@ -6,6 +6,7 @@ import checkView from './util/check-view';
 import { version } from '../package.json';
 
 let divIdIndex = 0;
+const { location: { protocol } } = window;
 
 const vegaAsLeafletLayer = async (config) => {
     const {
@@ -91,23 +92,34 @@ const vegaAsLeafletLayer = async (config) => {
     // create a div for the Leaflet map and add the Leaflet map to the mapContainer or to the container;
     // either of them should be a live element by now
     const divMap = document.createElement('div');
-    divMap.style.width = `${vegaView.width()}px`;
-    divMap.style.height = `${vegaView.height()}px`;
+    const width = vegaView.width() ? `${vegaView.width()}px` : '100%';
+    const height = vegaView.height() ? `${vegaView.height()}px` : '100%';
+    divMap.style.width = width;
+    divMap.style.height = height;
     let divMapId;
     // console.log(divContainer, divMapContainer);
     if (divMapContainer === null) {
         divMapId = `${divContainer.id}-map`;
         divContainer.appendChild(divMap);
     } else {
+        if (divMapContainer.style.width === '' || divMapContainer.style.width === 'undefined') {
+            divMapContainer.style.width = width;
+        }
+        if (divMapContainer.style.height === '' || divMapContainer.style.height === 'undefined') {
+            divMapContainer.style.height = height;
+        }
         divMapId = `${divMapContainer.id}-map`;
         divMapContainer.appendChild(divMap);
     }
+    // console.log('map container', divMapContainer);
+    // console.log('container', divContainer);
+    // console.log('map', divMap);
     divMap.id = divMapId;
     const leafletMap = new Map(divMapId, {
         zoomAnimation: false,
     }).setView([latitude.value, longitude.value], zoom.value);
 
-    new TileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    new TileLayer(`${protocol}//{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png`, {
         attribution: '<a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
         maxZoom,
     }).addTo(leafletMap);

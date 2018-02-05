@@ -30,10 +30,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /* eslint no-plusplus: 0 */
 
 var divIdIndex = 0;
+var _window = window,
+    protocol = _window.location.protocol;
+
 
 var vegaAsLeafletLayer = function () {
     var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(config) {
-        var spec, view, _config$renderer, renderer, _config$container, container, _config$mapContainer, mapContainer, _config$maxZoom, maxZoom, _config$cssClassVegaL, cssClassVegaLayer, _config$overruleVegaP, overruleVegaPadding, result, zoom, latitude, longitude, padding, vegaView, msg, divMapContainer, top, right, bottom, left, divContainer, divMap, divMapId, leafletMap, classes;
+        var spec, view, _config$renderer, renderer, _config$container, container, _config$mapContainer, mapContainer, _config$maxZoom, maxZoom, _config$cssClassVegaL, cssClassVegaLayer, _config$overruleVegaP, overruleVegaPadding, result, zoom, latitude, longitude, padding, vegaView, msg, divMapContainer, top, right, bottom, left, divContainer, divMap, width, height, divMapId, leafletMap, classes;
 
         return _regenerator2.default.wrap(function _callee$(_context) {
             while (1) {
@@ -108,9 +111,11 @@ var vegaAsLeafletLayer = function () {
                         // create a div for the Leaflet map and add the Leaflet map to the mapContainer or to the container;
                         // either of them should be a live element by now
                         divMap = document.createElement('div');
+                        width = vegaView.width() ? vegaView.width() + 'px' : '100%';
+                        height = vegaView.height() ? vegaView.height() + 'px' : '100%';
 
-                        divMap.style.width = vegaView.width() + 'px';
-                        divMap.style.height = vegaView.height() + 'px';
+                        divMap.style.width = width;
+                        divMap.style.height = height;
                         divMapId = void 0;
                         // console.log(divContainer, divMapContainer);
 
@@ -118,16 +123,25 @@ var vegaAsLeafletLayer = function () {
                             divMapId = divContainer.id + '-map';
                             divContainer.appendChild(divMap);
                         } else {
+                            if (divMapContainer.style.width === '' || divMapContainer.style.width === 'undefined') {
+                                divMapContainer.style.width = width;
+                            }
+                            if (divMapContainer.style.height === '' || divMapContainer.style.height === 'undefined') {
+                                divMapContainer.style.height = height;
+                            }
                             divMapId = divMapContainer.id + '-map';
                             divMapContainer.appendChild(divMap);
                         }
+                        // console.log('map container', divMapContainer);
+                        // console.log('container', divContainer);
+                        // console.log('map', divMap);
                         divMap.id = divMapId;
                         leafletMap = new _leaflet.Map(divMapId, {
                             zoomAnimation: false
                         }).setView([latitude.value, longitude.value], zoom.value);
 
 
-                        new _leaflet.TileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+                        new _leaflet.TileLayer(protocol + '//{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
                             attribution: '<a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
                             maxZoom: maxZoom
                         }).addTo(leafletMap);
@@ -155,7 +169,7 @@ var vegaAsLeafletLayer = function () {
 
                         return _context.abrupt('return', [divMapContainer, vegaView]);
 
-                    case 27:
+                    case 29:
                     case 'end':
                         return _context.stop();
                 }

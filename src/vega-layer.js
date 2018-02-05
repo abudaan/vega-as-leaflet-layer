@@ -88,6 +88,10 @@ const VegaLayer = (Layer || Class).extend({
         const center = this.map.getCenter();
         const zoom = this.map.getZoom();
 
+        // console.log('size', size);
+        // console.log('zoom', zoom);
+        // console.log('center', center);
+
         const sendSignal = (sig, value) => {
             if (this.view.signal(sig) !== value) {
                 this.view.signal(sig, value);
@@ -108,6 +112,13 @@ const VegaLayer = (Layer || Class).extend({
             return this.view.runAsync();
         }
         return 0;
+
+        // this.view.signal('width', size.x);
+        // this.view.signal('height', size.y);
+        // this.view.signal('latitude', center.lat);
+        // this.view.signal('longitude', center.lng);
+        // this.view.signal('zoom', zoom);
+        // return this.view.run();
     },
 });
 
