@@ -153,16 +153,16 @@ height: 0 # don't define height at all or set it to 0
 signals:
 - name: width
   on:
-    - events:
-        source: window
-        type: resize
-      update: "containerSize()[0] - padding.left - padding.right"
+  - events:
+    source: window
+    type: resize
+    update: "containerSize()[0] - padding.left - padding.right"
 - name: height
   on:
-    - events:
-        source: window
-        type: resize
-      update: "containerSize()[1] - padding.top - padding.bottom"
+  - events:
+    source: window
+    type: resize
+    update: "containerSize()[1] - padding.top - padding.bottom"
 ```
 
 This will make your Vega view responsive. The width and height of the `mapContainer` will be set to 100% so it resizes automatically together with the `container` element, which makes the Leaflet layer responsive as well.
